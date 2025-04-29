@@ -16,5 +16,7 @@ RUN npm run build
 FROM node:18-alpine
 WORKDIR /app
 
+EXPOSE 3000
+
 # Install only production dependencies
 COPY package*.json ./
