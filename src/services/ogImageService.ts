@@ -1,8 +1,14 @@
 import sharp from "sharp";
 
 import { getBasicTemplate } from "../templates/basic";
+import { getUnitTemplate } from "../templates/unit";
 
-export const getOgImageData = async (page: string): Promise<Buffer<ArrayBufferLike>> => {
+export interface IUnitOptions {
+  type: 'plot' | 'house';
+  number: number;
+}
+
+export const getOgImageData = async (page: string, unitOptions: IUnitOptions | undefined): Promise<Buffer<ArrayBufferLike>> => {
 
   let title = page;
 
@@ -12,7 +18,18 @@ export const getOgImageData = async (page: string): Promise<Buffer<ArrayBufferLi
 
   title = title.charAt(0).toUpperCase() + title.slice(1);
 
-  const svg = getBasicTemplate(title);
+  let svg: string = "";
+
+  if (page === "unit") {
+    if(!unitOptions || !unitOptions.type || !unitOptions.number) {
+      throw new Error("Invalid unit options provided.");
+    }
+    
+    svg = await getUnitTemplate(unitOptions);
+  } else {
+    svg = getBasicTemplate(title);
+  }
+
 
   const b = Buffer.from(svg);
 

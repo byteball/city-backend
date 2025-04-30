@@ -1,10 +1,7 @@
 import fastify from 'fastify';
-import dotenv from 'dotenv';
 
 import routesPlugin from './plugins/routes';
 import config from './config';
-
-dotenv.config();
 
 const app = fastify({ logger: true });
 
