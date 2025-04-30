@@ -24,7 +24,7 @@ export const getBasicTemplate = (title: string) => {
             dominant-baseline="middle"
             style="font-size:146px;"
         >
-            ${title.charAt(0).toUpperCase() + title.slice(1)}
+            ${title}
         </text>
 
         <defs>

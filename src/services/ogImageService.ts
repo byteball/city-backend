@@ -3,10 +3,19 @@ import sharp from "sharp";
 import { getBasicTemplate } from "../templates/basic";
 
 export const getOgImageData = async (page: string): Promise<Buffer<ArrayBufferLike>> => {
-  const svg = getBasicTemplate(page);
+
+  let title = page;
+
+  if (title === "faq") {
+    title = "F.A.Q.";
+  }
+
+  title = title.charAt(0).toUpperCase() + title.slice(1);
+
+  const svg = getBasicTemplate(title);
 
   const b = Buffer.from(svg);
-  
+
   let image: Buffer<ArrayBufferLike>;
 
   try {
