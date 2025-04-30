@@ -11,7 +11,7 @@ app.register(routesPlugin);
 
 const start = async () => {
   try {
-    await app.listen({ port: config.port, host: '0.0.0.0' });
+    await app.listen({ port: config.port, host: 'localhost' });
     app.log.info(`Server listening on port ${config.port}`);
   } catch (err) {
     app.log.error(err);
