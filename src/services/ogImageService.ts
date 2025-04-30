@@ -21,11 +21,12 @@ export const getOgImageData = async (page: string, unitOptions: IUnitOptions | u
   let svg: string = "";
 
   if (page === "unit") {
-    if(!unitOptions || !unitOptions.type || !unitOptions.number) {
-      throw new Error("Invalid unit options provided.");
+    if (unitOptions && unitOptions.type && unitOptions.number) {
+      svg = await getUnitTemplate(unitOptions);
+    } else {
+      svg = getBasicTemplate('Main page');
     }
-    
-    svg = await getUnitTemplate(unitOptions);
+
   } else {
     svg = getBasicTemplate(title);
   }
