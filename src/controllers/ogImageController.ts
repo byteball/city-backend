@@ -14,8 +14,10 @@ export const getOgImage = async (
     return reply.status(400).send({ error: 'Invalid page parameter' });
   }
 
+  console.error('start generating image');
   const img = await getOgImageData(requestParams.page);
-
+  console.error('image generated');
+  
   return reply
     .header('Content-Type', 'image/jpeg')
     .code(200)
