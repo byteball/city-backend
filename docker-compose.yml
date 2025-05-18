@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile_inline: |
+        # Stage for building the frontend (city-ui)
+        FROM node:18-slim AS client-builder
+        WORKDIR /app-client
+
+        # Install git and ca-certificates for cloning the repository
+        RUN apt-get update && apt-get install -y git ca-certificates --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+        # Clone or update the city-ui repository
+        RUN if [ -d .git ]; then \
+                git pull; \
+            else \
+                git clone https://github.com/taump/city-ui.git .; \
+            fi
+
+        # For example, leave it as it was, but with npm, as there is no information about the package manager for city-ui
+        # If city-ui uses pnpm, the commands will need to be changed accordingly.
+        RUN echo "--- Debug: Before npm run build in client-builder ---" && ls -la /app-client/ && ls -la /app-client/dist/ || echo "dist does not exist yet"
+        RUN npm install && npm run build
+        RUN echo "--- Debug: After npm run build in client-builder ---" && ls -la /app-client/dist/ && sha256sum /app-client/dist/index.html || echo "index.html not found in client-builder/dist"
+        RUN echo "--- Debug: Contents of /app-client/dist in client-builder (verification before copy) ---" && ls -la /app-client/dist/
+        RUN echo "--- Debug: Checksum of /app-client/dist/index.html in client-builder (verification before copy) ---" && sha256sum /app-client/dist/index.html || echo "index.html not found for checksum in client-builder/dist"
+
+
+        # Main stage for building the backend
+        FROM node:18-slim AS backend-builder
+        WORKDIR /app
+
+        # Install system dependencies required for the backend (e.g., libvips-dev)
+        RUN apt-get update && apt-get install -y libvips-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+        # Enable corepack to use pnpm
+        RUN corepack enable && corepack prepare pnpm@latest --activate
+
+        COPY package.json pnpm-lock.yaml ./
+        RUN pnpm install --frozen-lockfile
+
+        COPY . .
+        RUN pnpm run build
+        # Remove devDependencies after build
+        RUN pnpm prune --prod
+
+
+        # Final image
+        FROM node:18-slim
+        WORKDIR /app
+
+        # Enable corepack to use pnpm in the final image
+        RUN corepack enable && corepack prepare pnpm@latest --activate
+
+        # Install system dependencies required for the application runtime
+        # If libvips-dev is also needed for runtime:
+        RUN apt-get update && apt-get install -y libvips-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+        # Create a non-root user
+        RUN groupadd --gid 1001 nodejs && \
+            useradd --uid 1001 --gid 1001 --shell /bin/bash --create-home nodejs
+
+        # Copy the built backend
+        COPY --from=backend-builder /app/node_modules ./node_modules
+        COPY --from=backend-builder /app/dist ./dist
+        COPY --from=backend-builder /app/package.json ./package.json
+        
+        # Debugging and static file handling
+        RUN echo "--- Debug: Before creating ./static in final stage ---" && ls -la .
+        RUN mkdir -p ./static && echo "--- Debug: After creating ./static in final stage, before copy ---" && ls -la ./static/
+        # Copy static files from the frontend build (MODIFIED COPY)
+        COPY --from=client-builder /app-client/dist/index.html ./static/
+        RUN echo "--- Debug: Contents of ./static/ AFTER copy ---" && ls -la ./static/
+        RUN echo "--- Debug: Checksum of ./static/index.html AFTER copy ---" && sha256sum ./static/index.html || echo "index.html not found in static after copy"
+
+        # Set ownership for application files
+        RUN chown -R nodejs:nodejs /app
+
+        USER nodejs
+
+        EXPOSE 3000
+
+        # Start the application using pnpm start
+        CMD ["pnpm", "start"]
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production # Or development, depending on your needs
+    # If you want to mount the source code for development (hot-reloading):
+    # volumes:
+    #   - .:/app
+    #   - /app/node_modules # To avoid overwriting node_modules in the container with local ones
