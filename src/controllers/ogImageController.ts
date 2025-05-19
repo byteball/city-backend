@@ -7,7 +7,7 @@ const availablePages = ['unit', 'market', 'governance', 'faq', 'user'];
 export const getOgImage = async (
   request: FastifyRequest<{
     Params: { page: string };
-    Querystring: { type?: 'plot' | 'house'; number?: string };
+    Querystring: { house?: number; plot?: number };
   }>,
   reply: FastifyReply
 ) => {
@@ -22,8 +22,8 @@ export const getOgImage = async (
 
   if (requestParams.page == 'unit') {
     unitOptions = {
-      type: request.query.type as 'plot' | 'house',
-      number: parseInt(request.query.number || '0', 10)
+      plot: request.query.plot,
+      house: request.query.house
     };
   }
 

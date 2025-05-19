@@ -25,11 +25,11 @@ function wrapSvgText(text: string, maxCharsPerLine = 23) {
 
 export const getUnitTemplate = async (options: IUnitOptions) => {
     const roads = await Store.getRoads();
+    const type = options.house ? 'house' : 'plot';
+    if (options[type] === undefined) throw new Error(`No ${type} number provided`);
+    const unitData = await Store.getMapUnit(type, options[type]);
 
-    const unitData = await Store.getMapUnit(options.type, options.number);
-
-    if (!unitData) throw new Error(`No data found for ${options.type} ${options.number}`);
-
+    if (!unitData) throw new Error(`No data found for ${type} ${options[type]}`);
 
     const address = getAddressFromNearestRoad(roads, unitData);
 
