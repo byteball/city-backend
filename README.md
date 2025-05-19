@@ -36,7 +36,7 @@ server {
     }
 
 	location ~ \.(js|ico|svg|css|png|jpeg|json) {
-		root /path/to/build;
+		root /absolute/path/to/frontend/build;
 	}
 }
 ```
