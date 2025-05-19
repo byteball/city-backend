@@ -4,8 +4,8 @@ import { getBasicTemplate } from "../templates/basic";
 import { getUnitTemplate } from "../templates/unit";
 
 export interface IUnitOptions {
-  type: 'plot' | 'house';
-  number: number;
+  house?: number;
+  plot?: number;
 }
 
 export const getOgImageData = async (page: string, unitOptions: IUnitOptions | undefined): Promise<Buffer<ArrayBufferLike>> => {
@@ -21,7 +21,7 @@ export const getOgImageData = async (page: string, unitOptions: IUnitOptions | u
   let svg: string = "";
 
   if (page === "unit") {
-    if (unitOptions && unitOptions.type && unitOptions.number) {
+    if (unitOptions && (unitOptions.house || unitOptions.plot)) {
       svg = await getUnitTemplate(unitOptions);
     } else {
       svg = getBasicTemplate('Main page');
