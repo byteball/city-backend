@@ -1,4 +1,4 @@
-# prediction markets backend
+# City backend
 
 ## Installation
 
@@ -6,7 +6,7 @@ Install node.js 14+, clone the repository, then
 
 `npm install`
 
-By default the API is accessible at `http://localhost:5000` (`http://localhost:5001` for testnet). You may want to setup a reverse proxy like Nginx to make it accessible on a public url.
+By default the API is accessible at `http://localhost:3000`. You may want to setup a reverse proxy like Nginx to make it accessible on a public url.
 
 ## Warning
 
