@@ -1,6 +1,4 @@
-import { IPlot } from "../global";
 import description from "../local/description";
-import titles from "../local/titles";
 import store from "../store";
 import { getAddressFromNearestRoad } from "./getAddress";
 import { getUserName } from "./getUserName";
@@ -16,13 +14,13 @@ export const getPageDescription = async (page: string, params: string[], queryPa
 
             const type = qp.house ? "house" : "plot";
 
-            if (qp[type] === undefined) return titles.default;
+            if (qp[type] === undefined) return description.default;
 
             const unitData = await store.getMapUnit(type, Number(qp[type]));
 
             if (!unitData) {
                 console.log("Unit data not found for", type, qp[type]);
-                return titles.default;
+                return description.default;
             }
            
             const address = getAddressFromNearestRoad(roads, unitData);
@@ -34,12 +32,12 @@ export const getPageDescription = async (page: string, params: string[], queryPa
 
             return descriptionTemplate;
         } else {
-            return titles.main_empty;
+            return description.main_empty;
         }
     } else if (page === "user") {
         const wallet_address = params[0];
 
-        if (!wallet_address) return titles.default;
+        if (!wallet_address) return description.default;
 
         const name = await getUserName(wallet_address);
 
