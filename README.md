@@ -2,7 +2,7 @@
 
 ## Installation
 
-Install node.js 14+, clone the repository, then
+Install node.js 18+, clone the repository, then
 
 `npm install`
 
