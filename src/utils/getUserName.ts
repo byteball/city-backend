@@ -6,10 +6,14 @@ export const getUserName = async (wallet_address: string): Promise<string> => {
     let name = "unknown";
 
     const state = await store.getActualState();
-    const userInfo = state?.[`user_${wallet_address}`] as object | undefined;
+    interface UserInfo {
+        name?: string;
+    }
 
-    if (userInfo && "name" in userInfo) {
-        name = (userInfo as any).name;
+    const userInfo = state?.[`user_${wallet_address}`] as UserInfo | undefined;
+
+    if (userInfo && userInfo.name) {
+        name = userInfo.name;
     } else { // try to get from attestation service
         const attestations = await getAttestations(wallet_address);
 
