@@ -14,7 +14,7 @@ export const getPageDescription = async (page: string, params: string[], queryPa
 
             const type = qp.house ? "house" : "plot";
 
-            if (qp[type] === undefined) return description.default;
+            if (qp[type] === undefined || isNaN(Number(qp[type]))) return description.default;
 
             const unitData = await store.getMapUnit(type, Number(qp[type]));
 
