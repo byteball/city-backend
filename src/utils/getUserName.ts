@@ -12,7 +12,7 @@ export const getUserName = async (wallet_address: string): Promise<string> => {
 
     const userInfo = state?.[`user_${wallet_address}`] as UserInfo | undefined;
 
-    if (userInfo && userInfo.name) {
+    if (userInfo && userInfo.name && typeof userInfo.name === "string") {
         name = userInfo.name;
     } else { // try to get from attestation service
         const attestations = await getAttestations(wallet_address);
