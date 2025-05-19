@@ -21,8 +21,11 @@ export const getPageTitle = async (page: string, params: string[], queryParams?:
                 const plot1Owner = plot1Data.owner;
                 const plot2Owner = plot2Data.owner;
 
-                const name1 = plot1Owner ? await getUserName(plot1Owner) : "unknown";
-                const name2 = plot2Owner ? await getUserName(plot2Owner) : "unknown";
+                const [name1, name2] = await Promise.all([
+                    plot1Owner ? getUserName(plot1Owner) : Promise.resolve("unknown"),
+                    plot2Owner ? getUserName(plot2Owner) : Promise.resolve("unknown")
+                ]);
+
                 titleTemplate = titleTemplate.replaceAll("{name1}", name1);
                 titleTemplate = titleTemplate.replaceAll("{name2}", name2);
 
@@ -46,7 +49,7 @@ export const getPageTitle = async (page: string, params: string[], queryParams?:
                 console.log("Unit data not found for", type, qp[type]);
                 return titles.default;
             }
-           
+
             const address = getAddressFromNearestRoad(roads, unitData);
 
             titleTemplate = titles.main_with_unit.replaceAll("{address}", address);
