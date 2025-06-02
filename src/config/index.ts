@@ -10,4 +10,5 @@ export default {
   DISCORD_ATTESTOR: process.env.DISCORD_ATTESTOR,
   TELEGRAM_ATTESTOR: process.env.TELEGRAM_ATTESTOR,
   FRONT_END_URL: process.env.FRONT_END_URL,
+  FRONT_DIST_PATH: process.env.FRONT_DIST_PATH,
 } as const;
