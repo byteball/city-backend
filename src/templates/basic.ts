@@ -1,4 +1,8 @@
-export const getBasicTemplate = (title: string) => {
+export const getBasicTemplate = (title: string, isSmallTitle: boolean = false) => {
+    const textElement = isSmallTitle
+        ? `<text x="50%" y="50%" fill="#fff" text-anchor="middle" dominant-baseline="middle" xml:space="preserve" style="font-size:92px;">${title.split('\n').map((line, i) => `<tspan x=\"50%\" dy=\"${i === 0 ? '0' : '1.2em'}\">${line}</tspan>`).join('')}</text>`
+        : `<text x="50%" y="50%" fill="#fff" text-anchor="middle" dominant-baseline="middle" style="font-size:146px;">${title}</text>`;
+
     const svg = `
     <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
 
@@ -17,15 +21,7 @@ export const getBasicTemplate = (title: string) => {
         <rect width="69.5121" height="11.9164" rx="5.95818" transform="matrix(0.904337 0.426818 0.426818 -0.904337 113.576 70.8018)" fill="white"/>
         <rect x="76.2119" y="89.7109" width="89.289" height="89.289" rx="44.6445" stroke="white" stroke-width="12"/>
 
-        <text
-            x="50%" y="50%"
-            fill="#fff"
-            text-anchor="middle"
-            dominant-baseline="middle"
-            style="font-size:146px;"
-        >
-            ${title}
-        </text>
+        ${textElement}
 
         <defs>
             <linearGradient id="paint0_linear_1167_1222" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
@@ -34,7 +30,7 @@ export const getBasicTemplate = (title: string) => {
             </linearGradient>
         </defs>
     </svg>
-    `;
+`;
 
     return svg;
 };
