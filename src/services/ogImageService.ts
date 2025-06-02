@@ -24,7 +24,7 @@ export const getOgImageData = async (page: string, unitOptions: IUnitOptions | u
     if (unitOptions && (unitOptions.house || unitOptions.plot)) {
       svg = await getUnitTemplate(unitOptions);
     } else {
-      svg = getBasicTemplate('Main page');
+      svg = getBasicTemplate('A community engagement \n space for Obyte', true);
     }
 
   } else if (page === "claim") {
