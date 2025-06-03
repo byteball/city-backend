@@ -8,7 +8,7 @@ LOG_FILE="./process_monitor.log"
 # -----------------------
 # Check if the process is running
 # -----------------------
-if ! /usr/bin/pgrep -fx "$PROCESS_NAME" > /dev/null; then
+if ! /usr/bin/pgrep -f "$PROCESS_NAME" > /dev/null; then
     echo -e "Subject:$EMAIL_SUBJECT\n\n$EMAIL_BODY" | msmtp $EMAIL_TO
 
     # Log the event
