@@ -1,0 +1,1 @@
+*/20 * * * * cd city-backend; EMAIL_TO=user@domain.com ./check_daemon.sh 1>>check_daemon.log 2>>check_daemon.err
