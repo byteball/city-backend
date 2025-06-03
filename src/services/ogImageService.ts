@@ -28,7 +28,7 @@ export const getOgImageData = async (page: string, unitOptions: IUnitOptions | u
     }
 
   } else if (page === "claim") {
-    svg = getBasicTemplate('Your are neighbors');
+    svg = getBasicTemplate('Your are neighbors', true);
   } else {
     svg = getBasicTemplate(title);
   }
