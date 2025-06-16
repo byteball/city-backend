@@ -65,7 +65,6 @@ export const getPageTitle = async (page: string, params: string[], queryParams?:
 
         const name = await getUserName(wallet_address);
 
-        titleTemplate = titleTemplate.replaceAll("{wallet_address}", wallet_address);
         titleTemplate = titleTemplate.replaceAll("{name}", name);
 
         return titleTemplate;

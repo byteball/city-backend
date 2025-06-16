@@ -9,6 +9,6 @@ export default {
     market: "Obyte City  Market — buy and sell plots of land",
     governance: "Obyte City — Governance",
     faq: "Obyte City — Frequently asked questions",
-    user: "Obyte City — User {name}, {wallet_address}",
+    user: "Obyte City — {name}'s profile",
     default: "Obyte City",
 } as IPageTitles;
