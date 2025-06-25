@@ -5,7 +5,7 @@ import { getPageTitle } from '../utils/getPageTitle';
 import { getPageDescription } from '../utils/getPageDescription';
 import config from '../config';
 
-const OG_IMAGE_VERSION = 'v2' as const; // version for OG image URL
+const OG_IMAGE_VERSION = 'v3' as const; // version for OG image URL
 
 export const getIndexPageWithSeoTags = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
 
