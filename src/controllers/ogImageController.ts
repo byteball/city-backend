@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { getOgImageData, IUnitOptions } from '../services/ogImageService';
 
-const availablePages = ['unit', 'market', 'governance', 'faq', 'user', 'claim'];
+const availablePages = ['unit', 'market', 'governance', 'faq', 'user', 'claim', 'leaderboard'];
 
 export const getOgImage = async (
   request: FastifyRequest<{
