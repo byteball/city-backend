@@ -7,7 +7,7 @@ const availablePages = ['unit', 'market', 'governance', 'faq', 'user', 'claim', 
 export const getOgImage = async (
   request: FastifyRequest<{
     Params: { page: string };
-    Querystring: { house?: number; plot?: number };
+    Querystring: { house?: number; plot?: number; address?: string };
   }>,
   reply: FastifyReply
 ) => {
@@ -28,7 +28,7 @@ export const getOgImage = async (
   }
 
   try {
-    img = await getOgImageData(requestParams.page, unitOptions);
+    img = await getOgImageData(requestParams.page, unitOptions, request.query.address);
 
   } catch (e) {
     console.error('error generating image', e);
