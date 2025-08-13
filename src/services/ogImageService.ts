@@ -2,13 +2,14 @@ import sharp from "sharp";
 
 import { getBasicTemplate } from "../templates/basic";
 import { getUnitTemplate } from "../templates/unit";
+import { getUserTemplate } from "../templates/user";
 
 export interface IUnitOptions {
   house?: number;
   plot?: number;
 }
 
-export const getOgImageData = async (page: string, unitOptions: IUnitOptions | undefined): Promise<Buffer<ArrayBufferLike>> => {
+export const getOgImageData = async (page: string, unitOptions: IUnitOptions | undefined, address?: string): Promise<Buffer<ArrayBufferLike>> => {
 
   let title = page;
 
@@ -29,6 +30,10 @@ export const getOgImageData = async (page: string, unitOptions: IUnitOptions | u
 
   } else if (page === "claim") {
     svg = getBasicTemplate('You are neighbors', true);
+  } else if (page === "user") {
+    if(!address || typeof address !== 'string') throw new Error('address is required for user page');
+
+    svg = await getUserTemplate(address);
   } else {
     svg = getBasicTemplate(title);
   }
