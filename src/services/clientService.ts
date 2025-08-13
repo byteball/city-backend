@@ -3,9 +3,9 @@ import path from "path";
 import fs from "fs/promises";
 import { getPageTitle } from '../utils/getPageTitle';
 import { getPageDescription } from '../utils/getPageDescription';
-import config from '../config';
+import { getOgImageUrl } from '../utils/getOgImageUrl';
 
-const OG_IMAGE_VERSION = 'v3' as const; // version for OG image URL
+import config from '../config';
 
 export const getIndexPageWithSeoTags = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
 
@@ -36,7 +36,7 @@ export const getIndexPageWithSeoTags = async (request: FastifyRequest, reply: Fa
         htmlData = htmlData.replaceAll("____META_OG_TITLE____", title);
         htmlData = htmlData.replaceAll("____META_DESCRIPTION____", description);
 
-        htmlData = htmlData.replaceAll("____META_OG_IMAGE_URL____", config.FRONT_END_URL + '/og/' + (page || "unit") + (!page && (queryParams.plot || queryParams.house) ? ('?' + new URLSearchParams(queryParams).toString()) + `&${OG_IMAGE_VERSION}`: `?${OG_IMAGE_VERSION}`));
+        htmlData = htmlData.replaceAll("____META_OG_IMAGE_URL____", getOgImageUrl(page, queryParams, rest[0]));
 
         reply.type('text/html').header('Cache-Control', 'public, max-age=300').send(htmlData);  // Cache for 5 minutes
     } catch (error) {
